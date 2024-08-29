@@ -1,29 +1,30 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntryBySlug, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Main from '../../components/Main.astro';
 import H1 from '../../components/H1.astro';
 import { Image } from 'astro:assets';
+//  export const prerender = true
+//  export const getStaticPaths = async () => {
+//     const posts = await getCollection("posts");
+//     const paths = posts.map(post=>{
+//         return {
+//             params:{
+//                 slug: post.slug
+//             },
+//             props:{
+//                 post
+//             }
+//         }
+//     })
+//     return paths;
+// };
 
- export const getStaticPaths = async () => {
-    const posts = await getCollection("posts");
-    const paths = posts.map(post=>{
-        return {
-            params:{
-                slug: post.slug
-            },
-            props:{
-                post
-            }
-        }
-    })
-    return paths;
-};
+const {slug} = Astro.params;    
 
-type Props ={
-    post: CollectionEntry<"posts">
-}
-const { post} = Astro.props;
+const post = await getEntryBySlug("posts", slug as String)
+
+if(!post) return Astro.redirect('/404')
 const {Content}= await post.render()
 ---
 
