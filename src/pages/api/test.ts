@@ -10,6 +10,7 @@ export async function GET() {
 }
 export const POST: APIRoute = async ({ params, request }) => {
   const body = await request.json();
+  params;
   return new Response(JSON.stringify(body), {
     status: 200,
     headers: {
